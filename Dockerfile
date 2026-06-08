@@ -1,6 +1,6 @@
 # Multi-arch Node base — builds natively on Apple Silicon (arm64) and amd64,
 # so Chromium does NOT run under emulation.
-FROM node:22-bookworm-slim
+FROM node:26-bookworm-slim
 
 # Chromium for Mermaid rendering, installed from Debian so it is native on the
 # build platform. apt pulls in the shared libraries Chromium needs; the fonts

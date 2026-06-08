@@ -7,10 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-06-08
+
 ### Added
 - **tools**: Initial MCP toolset: `lint_markdown`, `validate_front_matter`, `render_mermaid_diagrams`, and `extract_mermaid_from_svg`.
 - **schemas**: JSON Schema set for seven Obsidian note types, with shared field definitions in `_shared.json`.
 - **docker**: stdio server image bundling Chromium for offline Mermaid rendering.
 - **tests**: unit (Jest), eval, and snapshot suites.
 
-[Unreleased]: https://github.com/psenger/obsidian-markdown-lint-mcp-server/commits/main
+[Unreleased]: https://github.com/psenger/obsidian-markdown-lint-mcp-server/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/psenger/obsidian-markdown-lint-mcp-server/releases/tag/v0.1.0

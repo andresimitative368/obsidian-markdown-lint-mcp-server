@@ -1,0 +1,101 @@
+{
+  "name": "obsidian-markdown-lint-mcp-server",
+  "version": "0.1.0",
+  "description": "MCP server for markdown linting, front matter validation, and Mermaid SVG rendering",
+  "license": "MIT",
+  "author": "Philip Senger",
+  "homepage": "https://github.com/psenger/obsidian-markdown-lint-mcp-server#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/psenger/obsidian-markdown-lint-mcp-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/psenger/obsidian-markdown-lint-mcp-server/issues"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "markdown",
+    "markdownlint",
+    "obsidian",
+    "mermaid",
+    "front-matter",
+    "json-schema",
+    "claude",
+    "docker",
+    "stdio"
+  ],
+  "type": "module",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "ts-node src/server.ts",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
+    "eval": "node --experimental-vm-modules --loader ts-node/esm tests/evals/eval-runner.ts",
+    "snapshot": "node --experimental-vm-modules --loader ts-node/esm tests/snapshot/snapshot-runner.ts"
+  },
+  "dependencies": {
+    "@mermaid-js/mermaid-cli": "^11.0.0",
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "gray-matter": "^4.0.3",
+    "markdownlint": "^0.40.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "^22.0.0",
+    "jest": "^30.4.2",
+    "ts-jest": "^29.4.11",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "jest": {
+    "preset": "ts-jest/presets/default-esm",
+    "testEnvironment": "node",
+    "extensionsToTreatAsEsm": [
+      ".ts"
+    ],
+    "moduleNameMapper": {
+      "^(\\.{1,2}/.*)\\.js$": "$1"
+    },
+    "transform": {
+      "^.+\\.ts$": [
+        "ts-jest",
+        {
+          "useESM": true,
+          "tsconfig": {
+            "module": "ESNext",
+            "moduleResolution": "Bundler"
+          }
+        }
+      ]
+    },
+    "testMatch": [
+      "**/tests/unit/**/*.test.ts"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.ts",
+      "!src/server.ts",
+      "!src/create-server.ts"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "lines": 90,
+        "branches": 85,
+        "functions": 90,
+        "statements": 90
+      }
+    },
+    "coverageReporters": [
+      "text",
+      "lcov",
+      "html"
+    ]
+  }
+}

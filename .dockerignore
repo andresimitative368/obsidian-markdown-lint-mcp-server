@@ -1,0 +1,14 @@
+node_modules
+src
+*.md
+.git
+.gitignore
+docker-compose.yml
+tsconfig.json
+.schemas
+tests
+test-obsidian-vault
+docs
+coverage
+.idea
+.claude

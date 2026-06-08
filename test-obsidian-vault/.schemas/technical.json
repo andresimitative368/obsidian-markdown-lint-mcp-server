@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Technical front matter",
+  "type": "object",
+  "required": ["type", "title", "author", "category", "tags", "description", "summary", "status", "date_created", "date_updated", "system", "component"],
+  "additionalProperties": false,
+  "properties": {
+    "type":               { "type": "string", "const": "technical" },
+    "title":              { "type": "string", "minLength": 1 },
+    "author":             { "type": "string", "minLength": 1 },
+    "category":           { "$ref": "#/definitions/category" },
+    "tags":               { "$ref": "#/definitions/tags" },
+    "description":        { "type": "string", "minLength": 1 },
+    "summary":            { "type": "string", "minLength": 1 },
+    "status":             { "$ref": "#/definitions/status" },
+    "version":            { "$ref": "#/definitions/semver" },
+    "date_created":       { "$ref": "#/definitions/date" },
+    "date_updated":       { "$ref": "#/definitions/date" },
+    "system":             { "type": "string", "minLength": 1 },
+    "component":          { "type": "string", "minLength": 1 },
+    "sources":            { "type": "array", "items": { "type": "string" } },
+    "related":            {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "array", "items": { "type": "string" } }
+      ]
+    },
+    "aliases":            { "type": "array", "items": { "type": "string" } },
+    "mermaid_svg_source": { "type": "string" },
+    "reviewers":          { "$ref": "#/definitions/nameList" },
+    "next_reviewer":      { "$ref": "#/definitions/nameList" },
+    "next_review_date":   { "$ref": "#/definitions/date" },
+    "signoff":            { "$ref": "#/definitions/signoffList" },
+    "revision_notes":     { "type": "array", "items": { "type": "string" } },
+    "published":          { "$ref": "#/definitions/publishedList" },
+    "backup":             { "type": "string" }
+  },
+  "definitions": {
+    "category": {
+      "type": "string",
+      "enum": [
+        "Artificial Intelligence", "Business Management", "Cloud Computing",
+        "Critical Thinking", "Database", "Decision Making", "DevOps",
+        "Documentation", "Education", "Entrepreneurship", "Finance", "How-To",
+        "Leadership", "Legal & Compliance", "Marketing", "Mental Health",
+        "Methodology", "Mobile Development", "Monitoring", "Operations",
+        "Personal Development", "Product Management", "Productivity",
+        "Project Management", "Security", "Software Architecture",
+        "Software Development", "Software Engineering", "Strategy",
+        "Web Development"
+      ]
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9/_-]*$" },
+      "minItems": 4,
+      "maxItems": 12
+    },
+    "status": {
+      "type": "string",
+      "enum": ["published", "draft", "in-progress"]
+    },
+    "semver": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "date": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "nameList": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "signoffList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "date"],
+        "properties": {
+          "name": { "type": "string" },
+          "date": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "publishedList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["when", "where", "version"],
+        "properties": {
+          "when":    { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "where":   { "type": "string" },
+          "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "obsidian-markdown-lint": {
+      "type": "stdio",
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "obsidian-markdown-lint-mcp"
+      ],
+      "env": {}
+    }
+  }
+}

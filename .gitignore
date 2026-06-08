@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+
+# TypeScript build output
+dist/
+*.tsbuildinfo
+
+# Test coverage
+coverage/
+
+# Logs
+*.log
+
+# Environment files
+.env
+.env.*
+
+# macOS
+.DS_Store
+
+# JetBrains IDEs
+.idea/
+
+# Claude Code local, per-developer settings (shared .claude/settings.json and
+# .mcp.json stay tracked)
+.claude/settings.local.json
+
+# Obsidian machine-specific session state in the test vault. The vault's
+# app/appearance/plugin config stays tracked; only the volatile workspace does not.
+test-obsidian-vault/.obsidian/workspace*.json

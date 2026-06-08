@@ -102,10 +102,45 @@ Releases are semver tags from `main`; `package.json` `version` is the source of 
    ```bash
    gh release create vx.y.z --draft --title "vx.y.z" --notes "<the [x.y.z] CHANGELOG section>"
    ```
-6. **Build the Docker image** to match the release:
+6. **Publish the Docker image** for the new tag (see [Publishing the Docker image](#publishing-the-docker-image) below).
+
+### Publishing the Docker image
+
+The release image is published **multi-arch** (`linux/amd64` + `linux/arm64`) so users on Apple Silicon and on amd64 servers each pull a native image. The canonical image is `ghcr.io/psenger/obsidian-markdown-lint-mcp` on the GitHub Container Registry; GHCR needs no extra account and authenticates with your `gh` token. (Docker Hub, `psenger/obsidian-markdown-lint-mcp`, works too; see the note at the end.)
+
+Three things trip people up, so mind them as you go:
+
+- **Compile first.** The Dockerfile does `COPY dist/ ./dist/` and `.dockerignore` excludes `src/` and `tsconfig.json`, so the image never compiles TypeScript. Run `npm run build` before building or you ship stale code.
+- **Use a `docker-container` builder.** The default buildx builder uses the `docker` driver, which cannot push a multi-platform image. Create a `docker-container` builder once.
+- **`--push`, not `--load`.** A multi-platform image cannot be loaded into the local daemon (it will not show in `docker images`); it goes straight to the registry.
+
+From a clean, up-to-date `main` checked out at the release tag:
+
+1. **Compile, and create the builder** (the builder is a one-time setup):
    ```bash
-   docker build -t obsidian-markdown-lint-mcp:<x.y.z> -t obsidian-markdown-lint-mcp:latest .
+   npm ci && npm run build
+   docker buildx create --name multiarch --driver docker-container --use --bootstrap
    ```
+2. **Log in to GHCR.** Your `gh` token needs the `write:packages` scope, and `docker login` is interactive:
+   ```bash
+   gh auth refresh -s write:packages
+   gh auth token | docker login ghcr.io -u psenger --password-stdin
+   ```
+3. **Build both arches and push** the `vx.y.z` and `latest` tags:
+   ```bash
+   docker buildx build \
+     --platform linux/amd64,linux/arm64 \
+     -t ghcr.io/psenger/obsidian-markdown-lint-mcp:vx.y.z \
+     -t ghcr.io/psenger/obsidian-markdown-lint-mcp:latest \
+     --push .
+   ```
+4. **Verify the manifest** lists both platforms:
+   ```bash
+   docker buildx imagetools inspect ghcr.io/psenger/obsidian-markdown-lint-mcp:vx.y.z
+   ```
+5. **Make the package public** (first push only). GHCR packages start private: on github.com → Packages → `obsidian-markdown-lint-mcp` → Package settings, set visibility to **Public** and link it to the repo so users can pull without authenticating.
+
+**Docker Hub instead:** log in with `docker login -u psenger` (use an access token, not your password), then run the same `docker buildx build` with `-t psenger/obsidian-markdown-lint-mcp:vx.y.z -t psenger/obsidian-markdown-lint-mcp:latest`.
 
 ---
 

